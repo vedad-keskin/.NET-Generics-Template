@@ -1,11 +1,11 @@
-using eCommerce.Services.Database;
+using CallTaxi.Services.Database;
+using CallTaxi.Model.Responses;
+using CallTaxi.Model.Requests;
+using CallTaxi.Model.SearchObjects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using eCommerce.Model.Responses;
-using eCommerce.Model.Requests;
-using eCommerce.Model.SearchObjects;
 
-namespace eCommerce.Services
+namespace CallTaxi.Services
 {
     public interface IUserService
     {

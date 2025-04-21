@@ -1,15 +1,16 @@
-using eCommerce.Services.Database;
+using CallTaxi.Services.Database;
+using CallTaxi.Model.Responses;
+using CallTaxi.Model.Requests;
+using CallTaxi.Model.SearchObjects;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using eCommerce.Model.Responses;
-using eCommerce.Model.Requests;
-using eCommerce.Model.SearchObjects;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace eCommerce.Services
+namespace CallTaxi.Services
 {
     public class UserService : IUserService
     {

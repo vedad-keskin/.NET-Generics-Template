@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eCommerce.Services.Database
+namespace CallTaxi.Services.Database
 {
     public class UserRole
     {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace eCommerce.Services.Database
+namespace CallTaxi.Services.Database
 {
     public static class DatabaseConfiguration
     {
