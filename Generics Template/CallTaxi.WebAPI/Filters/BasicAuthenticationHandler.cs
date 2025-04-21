@@ -1,5 +1,5 @@
-using eCommerce.Model.Requests;
-using eCommerce.Services;
+using CallTaxi.Model.Requests;
+using CallTaxi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace eCommerce.WebAPI.Filters
+namespace CallTaxi.WebAPI.Filters
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {

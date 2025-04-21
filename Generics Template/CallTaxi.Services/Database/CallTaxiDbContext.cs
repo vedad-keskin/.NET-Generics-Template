@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerce.Services.Database
+namespace CallTaxi.Services.Database
 {
     public class CallTaxiDbContext : DbContext
     {
@@ -58,8 +58,6 @@ namespace eCommerce.Services.Database
             modelBuilder.Entity<UserRole>()
                 .HasIndex(ur => new { ur.UserId, ur.RoleId })
                 .IsUnique();
-
-
         }
     }
 } 
