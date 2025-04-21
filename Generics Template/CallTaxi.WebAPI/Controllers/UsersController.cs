@@ -1,12 +1,16 @@
-using eCommerce.Model.Requests;
-using eCommerce.Model.Responses;
-using eCommerce.Model.SearchObjects;
-using eCommerce.Services;
+using CallTaxi.Model.Responses;
+using CallTaxi.Model.SearchObjects;
+using CallTaxi.Model.Requests;
+using CallTaxi.Services;
+using CallTaxi.Services.Database;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace eCommerce.WebAPI.Controllers
+namespace CallTaxi.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

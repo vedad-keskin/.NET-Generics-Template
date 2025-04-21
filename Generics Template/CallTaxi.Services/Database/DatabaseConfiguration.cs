@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace eCommerce.Services.Database
+namespace CallTaxi.Services.Database
 {
     public static class DatabaseConfiguration
     {

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace eCommerce.Model.Responses
+namespace CallTaxi.Model.Responses
 {
     public class UserResponse
     {

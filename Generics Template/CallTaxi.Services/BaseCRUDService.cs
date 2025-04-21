@@ -1,15 +1,16 @@
-using eCommerce.Services.Database;
+using CallTaxi.Model.Responses;
+using CallTaxi.Model.SearchObjects;
+using CallTaxi.Model.Requests;
+using CallTaxi.Services.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using eCommerce.Model.Responses;
-using eCommerce.Model.Requests;
-using eCommerce.Model.SearchObjects;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using MapsterMapper;
 
-namespace eCommerce.Services
+namespace CallTaxi.Services
 {
     public abstract class BaseCRUDService<T, TSearch, TEntity, TInsert, TUpdate> 
     : BaseService<T, TSearch, TEntity> where T : class where TSearch : BaseSearchObject where TEntity : class, new() where TInsert : class where TUpdate : class
