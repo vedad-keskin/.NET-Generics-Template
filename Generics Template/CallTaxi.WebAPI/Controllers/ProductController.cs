@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CallTaxi.WebAPI.Controllers
 {
-   
+
     public class ProductController : BaseCRUDController<ProductResponse, ProductSearchObject, ProductInsertRequest, ProductUpdateRequest>
     {
         public ProductController(IProductService service) : base(service)

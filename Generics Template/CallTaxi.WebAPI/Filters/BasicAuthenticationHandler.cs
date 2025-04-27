@@ -37,7 +37,7 @@ namespace CallTaxi.WebAPI.Filters
             var password = credentials[1];
 
             var user = await _userService.AuthenticateAsync(new UserLoginRequest { Username = username, Password = password });
-            
+
             if (user == null)
                 return AuthenticateResult.Fail("Invalid credentials");
 
@@ -50,7 +50,7 @@ namespace CallTaxi.WebAPI.Filters
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
-            
+
             // Add role claims
             if (user.Roles != null)
             {
@@ -59,7 +59,7 @@ namespace CallTaxi.WebAPI.Filters
                     claims.Add(new Claim(ClaimTypes.Role, role.Name));
                 }
             }
-            
+
             var identity = new ClaimsIdentity(claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, Scheme.Name);

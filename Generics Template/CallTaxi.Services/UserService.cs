@@ -1,14 +1,14 @@
 using CallTaxi.Services.Database;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CallTaxi.Model.Responses;
 using CallTaxi.Model.Requests;
 using CallTaxi.Model.SearchObjects;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CallTaxi.Services
 {

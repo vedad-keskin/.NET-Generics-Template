@@ -29,10 +29,10 @@ namespace CallTaxi.WebAPI.Controllers
         public async Task<ActionResult<UserResponse>> GetById(int id)
         {
             var user = await _userService.GetByIdAsync(id);
-            
+
             if (user == null)
                 return NotFound();
-                
+
             return user;
         }
 
@@ -47,10 +47,10 @@ namespace CallTaxi.WebAPI.Controllers
         public async Task<ActionResult<UserResponse>> Update(int id, UserUpsertRequest request)
         {
             var updatedUser = await _userService.UpdateAsync(id, request);
-            
+
             if (updatedUser == null)
                 return NotFound();
-                
+
             return updatedUser;
         }
 
@@ -58,11 +58,11 @@ namespace CallTaxi.WebAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var deleted = await _userService.DeleteAsync(id);
-            
+
             if (!deleted)
                 return NotFound();
-                
+
             return NoContent();
         }
     }
-} 
+}

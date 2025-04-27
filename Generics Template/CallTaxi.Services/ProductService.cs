@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CallTaxi.Model.Requests;
 using MapsterMapper;
-
 namespace CallTaxi.Services
 {
     public class ProductService : BaseCRUDService<ProductResponse, ProductSearchObject, Database.Product, ProductInsertRequest, ProductUpdateRequest>, IProductService
@@ -25,6 +24,8 @@ namespace CallTaxi.Services
             {
                 query = query.Where(p => p.Name.Contains(search.FTS) || p.Description.Contains(search.FTS));
             }
+
+        
 
             return query;
         }   
