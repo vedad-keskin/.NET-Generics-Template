@@ -10,7 +10,7 @@ namespace CallTaxi.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseCRUDController<T, TSearch, TInsert, TUpdate> 
+    public class BaseCRUDController<T, TSearch, TInsert, TUpdate>
             : BaseController<T, TSearch> where T : class where TSearch : BaseSearchObject, new() where TInsert : class where TUpdate : class
     {
         protected readonly ICRUDService<T, TSearch, TInsert, TUpdate> _crudService;
@@ -38,4 +38,4 @@ namespace CallTaxi.WebAPI.Controllers
             return await _crudService.DeleteAsync(id);
         }
     }
-} 
+}

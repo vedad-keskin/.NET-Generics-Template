@@ -1,9 +1,10 @@
 using CallTaxi.Services;
 using CallTaxi.Services.Database;
-using CallTaxi.WebAPI.Filters;
 using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using CallTaxi.Services.VehicleStateMachine;
+using CallTaxi.WebAPI.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,18 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IUserService, UserService>();
 //builder.Services.AddTransient<IProductTypeService, ProductTypeService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
+
+// State Machine
+builder.Services.AddTransient<BaseVehicleState>();
+builder.Services.AddTransient<InitialVehicleState>();
+builder.Services.AddTransient<PendingVehicleState>();
+builder.Services.AddTransient<AcceptedVehicleState>();
+builder.Services.AddTransient<RejectedVehicleState>();
+
+// Add new services
+builder.Services.AddTransient<IBrandService, BrandService>();
+builder.Services.AddTransient<IVehicleTierService, VehicleTierService>();
+builder.Services.AddTransient<IVehicleService, VehicleService>();
 
 builder.Services.AddMapster();
 // Configure database
@@ -22,7 +35,12 @@ builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(x =>
+    {
+        x.Filters.Add<ExceptionFilter>();
+    }
+);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
