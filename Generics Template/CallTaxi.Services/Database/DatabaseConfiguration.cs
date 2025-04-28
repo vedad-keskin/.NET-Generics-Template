@@ -17,4 +17,4 @@ namespace CallTaxi.Services.Database
                 options.UseSqlServer(connectionString));
         }
     }
-} 
+}

@@ -1,4 +1,3 @@
-using System;
 using CallTaxi.Model.SearchObjects;
 
 namespace CallTaxi.Model.SearchObjects

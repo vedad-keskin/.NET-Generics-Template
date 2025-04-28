@@ -13,46 +13,42 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CallTaxi.Services.VehicleStateMachine
 {
-    public class BaseVehicleState
-    {
+   public class BaseVehicleState
+   {
         protected readonly IServiceProvider _serviceProvider;
         protected readonly CallTaxiDbContext _context;
         protected readonly IMapper _mapper;
 
-        public BaseVehicleState(IServiceProvider serviceProvider, CallTaxiDbContext context, IMapper mapper)
-        {
+        public BaseVehicleState(IServiceProvider serviceProvider, CallTaxiDbContext context, IMapper mapper) {
             _serviceProvider = serviceProvider;
             _context = context;
             _mapper = mapper;
-
         }
         public virtual async Task<VehicleResponse> CreateAsync(VehicleInsertRequest request)
         {
-            throw new UserException("Not allowed in current state");
+                throw new UserException("Not allowed in current state");
         }
 
         public virtual async Task<VehicleResponse> UpdateAsync(int id, VehicleUpdateRequest request)
         {
-            throw new UserException("Not allowed in current state");
+                throw new UserException("Not allowed in current state");
         }
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            throw new UserException("Not allowed in current state");
+                throw new UserException("Not allowed in current state");
         }
-
+        
         public virtual async Task<VehicleResponse> AcceptAsync(int id)
         {
-            throw new UserException("Not allowed in current state");
+                throw new UserException("Not allowed in current state");
         }
 
         public virtual async Task<VehicleResponse> RejectAsync(int id)
         {
-            throw new UserException("Not allowed in current state");
+                throw new UserException("Not allowed in current state");
         }
 
-
-        public BaseVehicleState GetProductState(string stateName)
-        {
+        public BaseVehicleState GetProductState(string stateName) {
             switch (stateName)
             {
                 case "Initial":
@@ -68,5 +64,5 @@ namespace CallTaxi.Services.VehicleStateMachine
                     throw new Exception($"State {stateName} not defined");
             }
         }
-    }
-}
+   }
+} 

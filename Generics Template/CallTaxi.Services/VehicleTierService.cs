@@ -4,7 +4,6 @@ using CallTaxi.Model.SearchObjects;
 using CallTaxi.Services.Database;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace CallTaxi.Services
 {

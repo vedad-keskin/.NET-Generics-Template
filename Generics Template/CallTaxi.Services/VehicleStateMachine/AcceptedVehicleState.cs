@@ -1,4 +1,3 @@
-using CallTaxi.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using System.Linq;
 using System;
 using MapsterMapper;
 using CallTaxi.Model;
+using CallTaxi.Services.Database;
 
 namespace CallTaxi.Services.VehicleStateMachine
 {

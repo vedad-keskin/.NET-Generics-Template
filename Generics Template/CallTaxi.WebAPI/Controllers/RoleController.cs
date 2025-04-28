@@ -2,11 +2,12 @@ using CallTaxi.Model.Requests;
 using CallTaxi.Model.Responses;
 using CallTaxi.Model.SearchObjects;
 using CallTaxi.Services;
+using CallTaxi.WebAPI.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CallTaxi.WebAPI.Controllers
+namespace eCommerce.WebAPI.Controllers
 {
 
     public class RoleController : BaseCRUDController<RoleResponse, RoleSearchObject, RoleUpsertRequest, RoleUpsertRequest>
@@ -14,7 +15,7 @@ namespace CallTaxi.WebAPI.Controllers
         public RoleController(IRoleService service) : base(service)
         {
         }
-
+        
         // Allow anonymous access to GET endpoints only
         [HttpGet]
         [AllowAnonymous]
@@ -22,7 +23,7 @@ namespace CallTaxi.WebAPI.Controllers
         {
             return await _service.GetAsync(search ?? new RoleSearchObject());
         }
-
+        
         [HttpGet("{id}")]
         [AllowAnonymous]
         public override async Task<RoleResponse?> GetById(int id)
@@ -30,4 +31,4 @@ namespace CallTaxi.WebAPI.Controllers
             return await _service.GetByIdAsync(id);
         }
     }
-}
+} 
