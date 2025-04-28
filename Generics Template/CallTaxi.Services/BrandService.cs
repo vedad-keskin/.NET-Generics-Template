@@ -1,10 +1,10 @@
 using CallTaxi.Model.Requests;
 using CallTaxi.Model.Responses;
 using CallTaxi.Model.SearchObjects;
+using CallTaxi.Services;
 using CallTaxi.Services.Database;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace CallTaxi.Services
 {

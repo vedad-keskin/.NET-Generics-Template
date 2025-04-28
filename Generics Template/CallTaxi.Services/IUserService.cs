@@ -1,9 +1,9 @@
 using CallTaxi.Services.Database;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CallTaxi.Model.Responses;
 using CallTaxi.Model.Requests;
 using CallTaxi.Model.SearchObjects;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CallTaxi.Services
 {
@@ -16,4 +16,4 @@ namespace CallTaxi.Services
         Task<bool> DeleteAsync(int id);
         Task<UserResponse?> AuthenticateAsync(UserLoginRequest request);
     }
-} 
+}

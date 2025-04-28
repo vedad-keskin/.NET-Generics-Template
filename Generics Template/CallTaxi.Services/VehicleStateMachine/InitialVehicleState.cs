@@ -20,7 +20,6 @@ namespace CallTaxi.Services.VehicleStateMachine
 
         public override async Task<VehicleResponse> CreateAsync(VehicleInsertRequest request)
         {
-
             var entity = new Database.Vehicle();
             _mapper.Map(request, entity);
 
@@ -31,6 +30,5 @@ namespace CallTaxi.Services.VehicleStateMachine
 
             return _mapper.Map<VehicleResponse>(entity);
         }
-
     }
-}
+} 

@@ -9,7 +9,8 @@ using System.Linq;
 using System;
 using MapsterMapper;
 using CallTaxi.Model;
-using CallTaxi.Services.Database;
+using EasyNetQ;
+using CallTaxi.Model.Messages;
 
 namespace CallTaxi.Services.VehicleStateMachine
 {
@@ -27,7 +28,17 @@ namespace CallTaxi.Services.VehicleStateMachine
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<VehicleResponse>(entity);
+            var bus = RabbitHutch.CreateBus("host=localhost");
+
+            var response = _mapper.Map<VehicleResponse>(entity);
+
+            var vehiclePending = new VehiclePending
+            {
+                Vehicle = response
+            };
+            await bus.PubSub.PublishAsync(vehiclePending);
+
+            return response;
         }
 
         public override async Task<VehicleResponse> AcceptAsync(int id)
@@ -62,4 +73,4 @@ namespace CallTaxi.Services.VehicleStateMachine
             return true;
         }
     }
-}
+} 
