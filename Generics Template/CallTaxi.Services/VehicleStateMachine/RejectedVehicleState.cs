@@ -8,7 +8,6 @@ using CallTaxi.Model.SearchObjects;
 using System.Linq;
 using System;
 using MapsterMapper;
-using CallTaxi.Model;
 
 namespace CallTaxi.Services.VehicleStateMachine
 {
