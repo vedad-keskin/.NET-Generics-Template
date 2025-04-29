@@ -11,9 +11,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IUserService, UserService>();
-//builder.Services.AddTransient<IProductTypeService, ProductTypeService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 
 // State Machine
@@ -72,14 +70,6 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var app = builder.Build();
-
-
-// Ensure database is created
-//using (var scope = app.Services.CreateScope())
-//{
-//    var dbContext = scope.ServiceProvider.GetRequiredService<CallTaxiDbContext>();
-//    dbContext.Database.EnsureCreated();
-//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
