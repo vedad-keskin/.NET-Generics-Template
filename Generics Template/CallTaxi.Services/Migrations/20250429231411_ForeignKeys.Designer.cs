@@ -4,6 +4,7 @@ using CallTaxi.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CallTaxi.Services.Migrations
 {
     [DbContext(typeof(CallTaxiDbContext))]
-    partial class CallTaxiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429231411_ForeignKeys")]
+    partial class ForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,42 +96,6 @@ namespace CallTaxi.Services.Migrations
                             Id = 10,
                             Name = "Skoda"
                         });
-                });
-
-            modelBuilder.Entity("CallTaxi.Services.Database.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("CallTaxi.Services.Database.City", b =>
@@ -686,25 +653,6 @@ namespace CallTaxi.Services.Migrations
                             Description = "High-end vehicles offering top-tier comfort and amenities.",
                             Name = "Luxury"
                         });
-                });
-
-            modelBuilder.Entity("CallTaxi.Services.Database.Chat", b =>
-                {
-                    b.HasOne("CallTaxi.Services.Database.User", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("CallTaxi.Services.Database.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("CallTaxi.Services.Database.User", b =>
