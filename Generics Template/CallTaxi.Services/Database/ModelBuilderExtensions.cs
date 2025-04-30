@@ -56,7 +56,9 @@ namespace CallTaxi.Services.Database
                     PasswordSalt = "6raKZCuEsvnBBxPKHGpRtA==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
-                    PhoneNumber = DefaultPhoneNumber
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 1, // Male
+                    CityId = 5 // Sarajevo
                 },
                 new User 
                 { 
@@ -69,7 +71,9 @@ namespace CallTaxi.Services.Database
                     PasswordSalt = "O5R9WmM6IPCCMci/BCG/eg==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
-                    PhoneNumber = DefaultPhoneNumber
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 1, // Male
+                    CityId = 5 // Banja Luka
                 },
                 new User 
                 { 
@@ -82,7 +86,9 @@ namespace CallTaxi.Services.Database
                     PasswordSalt = "pfNS+OLBaQeGqBIzXXcWuA==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
-                    PhoneNumber = DefaultPhoneNumber
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 1, // Male
+                    CityId = 5 // Tuzla
                 },
                 new User 
                 { 
@@ -95,7 +101,9 @@ namespace CallTaxi.Services.Database
                     PasswordSalt = "c3ZKo0va3tYfnYuNKkHDbQ==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
-                    PhoneNumber = DefaultPhoneNumber
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 2, // Female
+                    CityId = 1 // Zenica
                 },
                 new User 
                 { 
@@ -108,7 +116,9 @@ namespace CallTaxi.Services.Database
                     PasswordSalt = "4ayImwSF0Q1QlxPABDp9Mw==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
-                    PhoneNumber = DefaultPhoneNumber
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 1, // Male
+                    CityId = 5 // Mostar
                 }
             );
 
@@ -217,6 +227,36 @@ namespace CallTaxi.Services.Database
                     PetFriendly = false,
                     SeatsCount = 4,
                 }
+            );
+
+            // Seed Genders
+            modelBuilder.Entity<Gender>().HasData(
+                new Gender { Id = 1, Name = "Male" },
+                new Gender { Id = 2, Name = "Female" }
+            );
+
+            // Seed Cities
+            modelBuilder.Entity<City>().HasData(
+                new City { Id = 1, Name = "Sarajevo" },
+                new City { Id = 2, Name = "Banja Luka" },
+                new City { Id = 3, Name = "Tuzla" },
+                new City { Id = 4, Name = "Zenica" },
+                new City { Id = 5, Name = "Mostar" },
+                new City { Id = 6, Name = "Bihać" },
+                new City { Id = 7, Name = "Brčko" },
+                new City { Id = 8, Name = "Bijeljina" },
+                new City { Id = 9, Name = "Prijedor" },
+                new City { Id = 10, Name = "Trebinje" },
+                new City { Id = 11, Name = "Doboj" },
+                new City { Id = 12, Name = "Cazin" },
+                new City { Id = 13, Name = "Velika Kladuša" },
+                new City { Id = 14, Name = "Visoko" },
+                new City { Id = 15, Name = "Zavidovići" },
+                new City { Id = 16, Name = "Gračanica" },
+                new City { Id = 17, Name = "Konjic" },
+                new City { Id = 18, Name = "Livno" },
+                new City { Id = 19, Name = "Srebrenik" },
+                new City { Id = 20, Name = "Gradačac" }
             );
         }
     }

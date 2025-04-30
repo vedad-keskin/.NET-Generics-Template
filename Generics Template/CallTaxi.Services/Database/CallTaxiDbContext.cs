@@ -14,6 +14,9 @@ namespace CallTaxi.Services.Database
         public DbSet<Brand> Brands { get; set; }
         public DbSet<VehicleTier> VehicleTiers { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Chat> Chats { get; set; }
     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -84,6 +87,41 @@ namespace CallTaxi.Services.Database
                 .HasOne(v => v.VehicleTier)
                 .WithMany()
                 .HasForeignKey(v => v.VehicleTierId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure Gender entity
+            modelBuilder.Entity<Gender>()
+                .HasIndex(g => g.Name)
+                .IsUnique();
+
+            // Configure City entity
+            modelBuilder.Entity<City>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Gender)
+                .WithMany()
+                .HasForeignKey(u => u.GenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.City)
+                .WithMany()
+                .HasForeignKey(u => u.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure Chat entity
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.Sender)
+                .WithMany()
+                .HasForeignKey(c => c.SenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.Receiver)
+                .WithMany()
+                .HasForeignKey(c => c.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Seed initial data

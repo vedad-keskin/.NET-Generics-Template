@@ -4,6 +4,7 @@ using CallTaxi.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CallTaxi.Services.Migrations
 {
     [DbContext(typeof(CallTaxiDbContext))]
-    partial class CallTaxiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429230528_CitiesGenders")]
+    partial class CitiesGenders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,42 +96,6 @@ namespace CallTaxi.Services.Migrations
                             Id = 10,
                             Name = "Skoda"
                         });
-                });
-
-            modelBuilder.Entity("CallTaxi.Services.Database.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("CallTaxi.Services.Database.City", b =>
@@ -351,9 +318,6 @@ namespace CallTaxi.Services.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -366,9 +330,6 @@ namespace CallTaxi.Services.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("GenderId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -400,12 +361,8 @@ namespace CallTaxi.Services.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("GenderId");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -416,11 +373,9 @@ namespace CallTaxi.Services.Migrations
                         new
                         {
                             Id = 1,
-                            CityId = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "calltaxi.receiver@gmail.com",
                             FirstName = "Denis",
-                            GenderId = 1,
                             IsActive = true,
                             LastName = "Mušić",
                             PasswordHash = "3KbrBi5n9zdQnceWWOK5zaeAwfEjsluyhRQUbNkcgLQ=",
@@ -431,11 +386,9 @@ namespace CallTaxi.Services.Migrations
                         new
                         {
                             Id = 2,
-                            CityId = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "example1@gmail.com",
                             FirstName = "Amel",
-                            GenderId = 1,
                             IsActive = true,
                             LastName = "Musić",
                             PasswordHash = "kDPVcZaikiII7vXJbMEw6B0xZ245I29ocaxBjLaoAC0=",
@@ -446,11 +399,9 @@ namespace CallTaxi.Services.Migrations
                         new
                         {
                             Id = 3,
-                            CityId = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "example2@gmail.com",
                             FirstName = "Adil",
-                            GenderId = 1,
                             IsActive = true,
                             LastName = "Joldić",
                             PasswordHash = "BiWDuil9svAKOYzii5wopQW3YqjVfQrzGE2iwH/ylY4=",
@@ -461,11 +412,9 @@ namespace CallTaxi.Services.Migrations
                         new
                         {
                             Id = 4,
-                            CityId = 1,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "calltaxi.sender@gmail.com",
                             FirstName = "Ajla",
-                            GenderId = 2,
                             IsActive = true,
                             LastName = "Frašto",
                             PasswordHash = "KUF0Jsocq9AqdwR9JnT2OrAqm5gDj7ecQvNwh6fW/Bs=",
@@ -476,11 +425,9 @@ namespace CallTaxi.Services.Migrations
                         new
                         {
                             Id = 5,
-                            CityId = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "example3@gmail.com",
                             FirstName = "Elmir",
-                            GenderId = 1,
                             IsActive = true,
                             LastName = "Babović",
                             PasswordHash = "juUTOe91pl0wpxh00N7eCzScw63/1gzn5vrGMsRCAhY=",
@@ -686,44 +633,6 @@ namespace CallTaxi.Services.Migrations
                             Description = "High-end vehicles offering top-tier comfort and amenities.",
                             Name = "Luxury"
                         });
-                });
-
-            modelBuilder.Entity("CallTaxi.Services.Database.Chat", b =>
-                {
-                    b.HasOne("CallTaxi.Services.Database.User", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("CallTaxi.Services.Database.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("CallTaxi.Services.Database.User", b =>
-                {
-                    b.HasOne("CallTaxi.Services.Database.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("CallTaxi.Services.Database.Gender", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Gender");
                 });
 
             modelBuilder.Entity("CallTaxi.Services.Database.UserRole", b =>
