@@ -28,6 +28,9 @@ builder.Services.AddTransient<RejectedVehicleState>();
 builder.Services.AddTransient<IBrandService, BrandService>();
 builder.Services.AddTransient<IVehicleTierService, VehicleTierService>();
 builder.Services.AddTransient<IVehicleService, VehicleService>();
+builder.Services.AddTransient<IDriveRequestService, DriveRequestService>();
+builder.Services.AddTransient<IDriveRequestStatusService, DriveRequestStatusService>();
+builder.Services.AddTransient<IReviewService, ReviewService>();
 
 builder.Services.AddMapster();
 // Configure database

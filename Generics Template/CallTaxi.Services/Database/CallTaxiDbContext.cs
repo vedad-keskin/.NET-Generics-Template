@@ -17,6 +17,9 @@ namespace CallTaxi.Services.Database
         public DbSet<Gender> Genders { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Chat> Chats { get; set; }
+        public DbSet<DriveRequest> DriveRequests { get; set; }
+        public DbSet<DriveRequestStatus> DriveRequestStatuses { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -123,6 +126,56 @@ namespace CallTaxi.Services.Database
                 .WithMany()
                 .HasForeignKey(c => c.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure DriveRequest entity
+            modelBuilder.Entity<DriveRequest>()
+                .HasOne(dr => dr.User)
+                .WithMany()
+                .HasForeignKey(dr => dr.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<DriveRequest>()
+                .HasOne(dr => dr.Driver)
+                .WithMany()
+                .HasForeignKey(dr => dr.DriverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<DriveRequest>()
+                .HasOne(dr => dr.Vehicle)
+                .WithMany()
+                .HasForeignKey(dr => dr.VehicleId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<DriveRequest>()
+                .HasOne(dr => dr.VehicleTier)
+                .WithMany()
+                .HasForeignKey(dr => dr.VehicleTierId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure DriveRequest entity relationships
+            modelBuilder.Entity<DriveRequest>()
+                .HasOne(dr => dr.Status)
+                .WithMany()
+                .HasForeignKey(dr => dr.StatusId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure Review entity
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.DriveRequest)
+                .WithMany()
+                .HasForeignKey(r => r.DriveRequestId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Only allow one review per drive request per user
+            modelBuilder.Entity<Review>()
+                .HasIndex(r => new { r.DriveRequestId, r.UserId })
+                .IsUnique();
 
             // Seed initial data
             modelBuilder.SeedData();
