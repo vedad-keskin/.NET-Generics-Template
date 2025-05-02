@@ -25,5 +25,4 @@
     <ProjectReference Include="..\CallTaxi.Services\CallTaxi.Services.csproj" />
   </ItemGroup>
 
-
 </Project>
