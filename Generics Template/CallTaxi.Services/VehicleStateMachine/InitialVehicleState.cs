@@ -9,13 +9,21 @@ using System.Linq;
 using System;
 using MapsterMapper;
 using CallTaxi.Model;
+using EasyNetQ;
+using CallTaxi.Subscriber.Models;
+using Microsoft.Extensions.Configuration;
+using CallTaxi.Subscriber;
 
 namespace CallTaxi.Services.VehicleStateMachine
 {
     public class InitialVehicleState : BaseVehicleState
     {
-        public InitialVehicleState(IServiceProvider serviceProvider, CallTaxiDbContext context, IMapper mapper) : base(serviceProvider, context, mapper)
+        private readonly IConfiguration _configuration;
+
+        public InitialVehicleState(IServiceProvider serviceProvider, CallTaxiDbContext context, IMapper mapper, IConfiguration configuration) 
+            : base(serviceProvider, context, mapper)
         {
+            _configuration = configuration;
         }
 
         public override async Task<VehicleResponse> CreateAsync(VehicleInsertRequest request)
@@ -28,7 +36,34 @@ namespace CallTaxi.Services.VehicleStateMachine
             _context.Vehicles.Add(entity);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<VehicleResponse>(entity);
+            // Reload entity with Brand information
+            await _context.Entry(entity).Reference(v => v.Brand).LoadAsync();
+
+            // Get admin emails
+            var adminEmails = await _context.Users
+                .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Administrator"))
+                .Select(u => u.Email)
+                .ToListAsync();
+
+            var bus = RabbitHutch.CreateBus("host=localhost");
+
+            var response = _mapper.Map<VehicleResponse>(entity);
+
+            // Create RabbitMQ notification DTO
+            var notificationDto = new VehicleNotificationDto
+            {
+                BrandName = entity.Brand.Name,
+                Name = entity.Name,
+                AdminEmails = adminEmails
+            };
+
+            var vehicleNotification = new VehicleNotification
+            {
+                Vehicle = notificationDto
+            };
+            await bus.PubSub.PublishAsync(vehicleNotification);
+
+            return response;
         }
     }
 } 
