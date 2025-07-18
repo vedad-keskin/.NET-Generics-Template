@@ -1,6 +1,7 @@
 import 'package:calltaxi_desktop_admin/providers/auth_provider.dart';
 import 'package:calltaxi_desktop_admin/providers/city_provider.dart';
 import 'package:calltaxi_desktop_admin/providers/brand_provider.dart';
+import 'package:calltaxi_desktop_admin/providers/user_provider.dart';
 import 'package:calltaxi_desktop_admin/screens/city_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ void main() {
         ),
         ChangeNotifierProvider<BrandProvider>(
           create: (context) => BrandProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
         ),
       ],
       child: const MyApp(),
