@@ -2,6 +2,9 @@ import 'package:calltaxi_desktop_admin/main.dart';
 import 'package:flutter/material.dart';
 import '../screens/city_list_screen.dart';
 import '../screens/brand_list_screen.dart';
+import '../screens/user_list_screen.dart';
+import '../screens/driver_list_screen.dart';
+import '../screens/admin_list_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({
@@ -40,11 +43,29 @@ class _MasterScreenState extends State<MasterScreen> {
         child: ListView(
           children: [
             ListTile(
-              title: Text('Cities'),
+              title: Text('Administrators'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => CityListScreen()),
+                  MaterialPageRoute(builder: (context) => AdminListScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Drivers'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => DriverListScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Users'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserListScreen()),
                 );
               },
             ),
@@ -54,6 +75,15 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => BrandListScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Cities'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => CityListScreen()),
                 );
               },
             ),
