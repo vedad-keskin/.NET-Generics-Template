@@ -52,6 +52,15 @@ namespace CallTaxi.Services.Services
 
         protected override IQueryable<Vehicle> ApplyFilter(IQueryable<Vehicle> query, VehicleSearchObject search)
         {
+            if (!string.IsNullOrEmpty(search.FTS))
+            {
+                query = query.Where(v =>
+                    v.Name.Contains(search.FTS) ||
+                    v.Brand.Name.Contains(search.FTS) ||
+                    (v.User.FirstName + " " + v.User.LastName).Contains(search.FTS)
+                );
+            }
+
             if (!string.IsNullOrEmpty(search.Name))
             {
                 query = query.Where(v => v.Name.Contains(search.Name));
@@ -67,9 +76,19 @@ namespace CallTaxi.Services.Services
                 query = query.Where(v => v.BrandId == search.BrandId);
             }
 
+            if (!string.IsNullOrEmpty(search.BrandName))
+            {
+                query = query.Where(v => v.Brand.Name.Contains(search.BrandName));
+            }
+
             if (search.UserId.HasValue)
             {
                 query = query.Where(v => v.UserId == search.UserId);
+            }
+
+            if (!string.IsNullOrEmpty(search.UserFullName))
+            {
+                query = query.Where(v => (v.User.FirstName + " " + v.User.LastName).Contains(search.UserFullName));
             }
 
             if (search.VehicleTierId.HasValue)
@@ -82,7 +101,17 @@ namespace CallTaxi.Services.Services
                 query = query.Where(v => v.PetFriendly == search.PetFriendly);
             }
 
-            return query.Include(v => v.Brand).Include(v => v.VehicleTier);
+            // Ensure User is included for UserFullName
+            return query.Include(v => v.Brand).Include(v => v.VehicleTier).Include(v => v.User);
+        }
+
+        protected override VehicleResponse MapToResponse(Vehicle entity)
+        {
+            var response = base.MapToResponse(entity);
+            response.BrandLogo = entity.Brand?.Logo;
+            response.UserFullName = entity.User != null ? $"{entity.User.FirstName} {entity.User.LastName}" : string.Empty;
+            response.VehicleTierName = entity.VehicleTier?.Name;
+            return response;
         }
 
         public async Task<VehicleResponse> AcceptAsync(int id)
