@@ -30,6 +30,7 @@ namespace CallTaxi.Services.VehicleStateMachine
         {
             var entity = await _context.Vehicles
                 .Include(v => v.Brand)
+                .Include(v => v.User)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
             if (entity == null)
@@ -52,6 +53,8 @@ namespace CallTaxi.Services.VehicleStateMachine
             var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
 
             var response = _mapper.Map<VehicleResponse>(entity);
+            response.BrandLogo = entity.Brand?.Logo;
+            response.UserFullName = entity.User != null ? $"{entity.User.FirstName} {entity.User.LastName}" : string.Empty;
 
             // Create RabbitMQ notification DTO
             var notificationDto = new VehicleNotificationDto
