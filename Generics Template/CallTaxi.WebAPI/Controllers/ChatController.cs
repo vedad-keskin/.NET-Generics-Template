@@ -18,6 +18,12 @@ namespace CallTaxi.WebAPI.Controllers
             _chatService = service;
         }
 
+        [HttpGet("optimized")]
+        public async Task<ActionResult<PagedResult<ChatResponse>>> GetOptimized([FromQuery] ChatSearchObject? search = null)
+        {
+            return await _chatService.GetOptimizedAsync(search ?? new ChatSearchObject());
+        }
+
         [HttpPost("{id}/read")]
         public async Task<IActionResult> MarkAsRead(int id)
         {
@@ -32,6 +38,16 @@ namespace CallTaxi.WebAPI.Controllers
         public async Task<ActionResult<int>> GetUnreadCount([FromQuery] int userId)
         {
             return await _chatService.GetUnreadCountAsync(userId);
+        }
+
+        [HttpPost("mark-conversation-read")]
+        public async Task<IActionResult> MarkConversationAsRead([FromQuery] int senderId, [FromQuery] int receiverId)
+        {
+            var result = await _chatService.MarkConversationAsReadAsync(senderId, receiverId);
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
     }
 } 
