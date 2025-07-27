@@ -9,6 +9,7 @@ class Review {
   final String? driverFullName;
   final int userId;
   final String? userFullName;
+  final String? userPicture;
   final int rating;
   final String? comment;
   final DateTime createdAt;
@@ -21,6 +22,7 @@ class Review {
     this.driverFullName,
     this.userId = 0,
     this.userFullName,
+    this.userPicture,
     this.rating = 0,
     this.comment,
     required this.createdAt,
