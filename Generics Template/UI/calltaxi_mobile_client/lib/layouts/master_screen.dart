@@ -3,6 +3,7 @@ import 'package:calltaxi_mobile_client/screens/profile_screen.dart';
 import 'package:calltaxi_mobile_client/screens/chat_list_screen.dart';
 import 'package:calltaxi_mobile_client/screens/review_list_screen.dart';
 import 'package:calltaxi_mobile_client/providers/user_provider.dart';
+import 'package:calltaxi_mobile_client/screens/calltaxi_screen.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key, required this.child, required this.title});
@@ -30,7 +31,7 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   void _onItemTapped(int index) {
-    if (index == 3) {
+    if (index == 4) {
       // Logout - clear user data and show logout dialog
       UserProvider.currentUser = null;
 
@@ -82,13 +83,23 @@ class _MasterScreenState extends State<MasterScreen> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: [ProfileScreen(), ChatListScreen(), ReviewListScreen()],
+        children: [
+          CallTaxiScreen(),
+          ProfileScreen(),
+          ChatListScreen(),
+          ReviewListScreen(),
+          Container(), // Placeholder for logout (index 4)
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_taxi),
+            label: 'Call Taxi',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chats'),
           BottomNavigationBarItem(
