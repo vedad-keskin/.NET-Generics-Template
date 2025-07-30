@@ -3,19 +3,22 @@ import 'package:calltaxi_mobile_client/model/driver_request.dart';
 import 'package:calltaxi_mobile_client/model/search_result.dart';
 import 'package:calltaxi_mobile_client/providers/driver_request_provider.dart';
 import 'package:calltaxi_mobile_client/providers/user_provider.dart';
+import 'package:calltaxi_mobile_client/providers/review_provider.dart';
 import 'package:calltaxi_mobile_client/utils/text_field_decoration.dart';
 import 'package:provider/provider.dart';
-import 'package:calltaxi_mobile_client/screens/drives_details_screen.dart';
+import 'package:calltaxi_mobile_client/screens/review_details_screen.dart';
+import 'dart:convert';
 
-class DrivesListScreen extends StatefulWidget {
-  const DrivesListScreen({super.key});
+class DriveSelectionScreen extends StatefulWidget {
+  const DriveSelectionScreen({super.key});
 
   @override
-  State<DrivesListScreen> createState() => _DrivesListScreenState();
+  State<DriveSelectionScreen> createState() => _DriveSelectionScreenState();
 }
 
-class _DrivesListScreenState extends State<DrivesListScreen> {
+class _DriveSelectionScreenState extends State<DriveSelectionScreen> {
   late DriverRequestProvider driverRequestProvider;
+  late ReviewProvider reviewProvider;
   TextEditingController searchController = TextEditingController();
   SearchResult<DriverRequest>? drives;
   bool _isLoading = false;
@@ -30,19 +33,40 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
     setState(() => _isLoading = true);
 
     try {
+      // Get completed drives for current user
       var filter = {
         "page": 0,
         "pageSize": 100,
         "includeTotalCount": true,
         "fts": _searchText,
         "userId": UserProvider.currentUser!.id,
-        "status": "Completed", // Filter for completed drives only
+        "status": "Completed", // Only completed drives
       };
 
       var result = await driverRequestProvider.get(filter: filter);
 
+      // Filter out drives that already have reviews
+      var unreviewedDrives = <DriverRequest>[];
+      for (var drive in result.items ?? []) {
+        // Check if this drive already has a review
+        var reviewFilter = {
+          "page": 0,
+          "pageSize": 1,
+          "includeTotalCount": true,
+          "driveRequestId": drive.id,
+          "userId": UserProvider.currentUser!.id,
+        };
+
+        var reviewResult = await reviewProvider.get(filter: reviewFilter);
+        if (reviewResult.items == null || reviewResult.items!.isEmpty) {
+          unreviewedDrives.add(drive);
+        }
+      }
+
       setState(() {
-        drives = result;
+        drives = SearchResult<DriverRequest>()
+          ..items = unreviewedDrives
+          ..totalCount = unreviewedDrives.length;
         _isLoading = false;
       });
     } catch (e) {
@@ -62,23 +86,28 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
         context,
         listen: false,
       );
+      reviewProvider = Provider.of<ReviewProvider>(context, listen: false);
       await _performSearch();
     });
   }
 
   Widget _buildDriveCard(DriverRequest drive) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DrivesDetailsScreen(drive: drive),
+              builder: (context) =>
+                  ReviewDetailsScreen(driveRequest: drive, isNewReview: true),
             ),
-          );
+          ).then((_) {
+            // Refresh drive list when returning from review details
+            _performSearch();
+          });
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -87,44 +116,35 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '#${drive.id.toString().padLeft(4, '0')}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Icon(Icons.local_taxi, color: Colors.orange, size: 40),
-                    ],
-                  ),
+                  Icon(Icons.local_taxi, color: Colors.orange, size: 40),
                   SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          'Drive #${drive.id.toString().padLeft(6, '0')}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4),
                         if (drive.driverFullName != null)
                           Text(
-                            'Driver: ${drive.driverFullName ?? 'Unknown'}',
+                            'Driver: ${drive.driverFullName}',
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[800],
+                              fontSize: 14,
+                              color: Colors.grey[600],
                             ),
                           ),
                         SizedBox(height: 4),
                         Text(
-                          '${drive.vehicleTierName ?? 'Unknown'} Tier Drive',
+                          '${drive.vehicleTierName ?? 'Unknown'} Tier',
                           style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.grey[500],
                           ),
                         ),
                       ],
@@ -132,43 +152,41 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         '${drive.finalPrice.toStringAsFixed(2)} KM',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.green,
                         ),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        _formatTime(drive.createdAt),
+                        '${drive.distance.toStringAsFixed(1)} km',
                         style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          'Completed',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
                       ),
                     ],
                   ),
                 ],
+              ),
+              SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    'Tap to Review',
+                    style: TextStyle(
+                      color: Colors.orange.shade800,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -177,24 +195,14 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
     );
   }
 
-  String _formatTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Select Drive to Review"),
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
+      ),
       body: Column(
         children: [
           // Search bar
@@ -228,7 +236,7 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          "No completed drives found",
+                          "No drives to review",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.grey[600],
@@ -236,7 +244,7 @@ class _DrivesListScreenState extends State<DrivesListScreen> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          "Your completed rides will appear here",
+                          "All your completed rides have been reviewed",
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[500],
